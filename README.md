@@ -1,2 +1,3 @@
-# psa-proyect
-Sistema de gestión para PSA
+# psa-project
+
+Sistema de gestión para la empresa PSA
