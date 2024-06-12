@@ -1,6 +1,6 @@
 package proyectos.integration.cucumber;
 
-import proyectos.model.Proyecto;
+import proyectos.model.Project;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
 
-    private Proyecto proyecto;
+    private Project project;
 
     @Before
     public void setup() {
