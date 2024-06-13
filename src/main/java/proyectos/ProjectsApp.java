@@ -44,7 +44,7 @@ public class ProjectsApp {
 		return projectService.getProjects();
 	}
 
-	@GetMapping("/accounts/{projectCode}")
+	@GetMapping("/projects/{projectCode}")
 	public ResponseEntity<Project> getProject(@PathVariable Long projectCode) {
 		Optional<Project> projectOptional = projectService.findByProjectCode(projectCode);
 		return ResponseEntity.of(projectOptional);

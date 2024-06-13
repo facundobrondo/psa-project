@@ -28,6 +28,23 @@ public class Project {
         this.status = StatusProject.INITIATED;
     }
 
+    public Project(Long leaderCode, Long productCode, String name, LocalDate startDate, LocalDate endDate) {
+        this.leaderCode = leaderCode;
+        this.productCode = productCode;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = StatusProject.INITIATED;
+    }
+
+    public Project(Long productCode, String name, LocalDate startDate, LocalDate endDate) {
+        this.productCode = productCode;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = StatusProject.INITIATED;
+    }
+
     public Long getProjectCode() {
         return projectCode;
     }
