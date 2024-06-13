@@ -1,6 +1,6 @@
 package proyectos.model;
 
-public enum StatusProject {
+public enum ProjectStatus {
     
     INITIATED,
 

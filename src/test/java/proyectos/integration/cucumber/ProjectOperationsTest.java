@@ -1,11 +1,9 @@
 package proyectos.integration.cucumber;
 
 import proyectos.model.Project;
-import proyectos.model.StatusProject;
-import proyectos.service.ProjectService;
+import proyectos.model.ProjectStatus;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -56,7 +54,7 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         assertEquals(name, project.getName());
         assertEquals(LocalDate.parse(startDate), project.getStartDate());
         assertEquals(LocalDate.parse(endDate), project.getEndDate());
-        assertEquals(StatusProject.valueOf(status.toUpperCase()), project.getStatus());
+        assertEquals(ProjectStatus.valueOf(status.toUpperCase()), project.getStatus());
     }
 
     @Then("^The project should be created without leader, product code (\\d+), name (\\w+), start date (\\d{4}-\\d{2}-\\d{2}), end date (\\d{4}-\\d{2}-\\d{2}) and status (\\w+)$")
@@ -67,7 +65,7 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         assertEquals(name, project.getName());
         assertEquals(LocalDate.parse(startDate), project.getStartDate());
         assertEquals(LocalDate.parse(endDate), project.getEndDate());
-        assertEquals(StatusProject.valueOf(status.toUpperCase()), project.getStatus());
+        assertEquals(ProjectStatus.valueOf(status.toUpperCase()), project.getStatus());
     }
 
     @After

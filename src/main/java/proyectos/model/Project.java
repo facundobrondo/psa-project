@@ -22,10 +22,10 @@ public class Project {
 
     private LocalDate endDate;
 
-    private StatusProject status;
+    private ProjectStatus status;
 
     public Project() {
-        this.status = StatusProject.INITIATED;
+        this.status = ProjectStatus.INITIATED;
     }
 
     public Project(Long leaderCode, Long productCode, String name, LocalDate startDate, LocalDate endDate) {
@@ -34,7 +34,7 @@ public class Project {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.status = StatusProject.INITIATED;
+        this.status = ProjectStatus.INITIATED;
     }
 
     public Project(Long productCode, String name, LocalDate startDate, LocalDate endDate) {
@@ -42,7 +42,7 @@ public class Project {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.status = StatusProject.INITIATED;
+        this.status = ProjectStatus.INITIATED;
     }
 
     public Long getProjectCode() {
@@ -89,11 +89,11 @@ public class Project {
         this.endDate = endDate;
     }
 
-    public StatusProject getStatus() {
+    public ProjectStatus getStatus() {
         return status;
     }
 
-    public void setStatus(StatusProject status) {
+    public void setStatus(ProjectStatus status) {
         this.status = status;
     }
 }

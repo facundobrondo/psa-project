@@ -1,6 +1,7 @@
 package proyectos;
 
 import proyectos.model.Project;
+import proyectos.model.Task;
 import proyectos.service.ProjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.Optional;
 
+import proyectos.service.TaskService;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -28,6 +30,9 @@ public class ProjectsApp {
 
 	@Autowired
 	private ProjectService projectService;
+
+	@Autowired
+	private TaskService taskService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectsApp.class, args);
@@ -48,6 +53,12 @@ public class ProjectsApp {
 	public ResponseEntity<Project> getProject(@PathVariable Long projectCode) {
 		Optional<Project> projectOptional = projectService.findByProjectCode(projectCode);
 		return ResponseEntity.of(projectOptional);
+	}
+
+	@PostMapping("/projects/{projectCode}/tasks")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Task createTask(@PathVariable Long projectCode, @RequestBody Task task) {
+    	return taskService.createTask(projectCode, task);
 	}
 
 	@Bean
