@@ -24,13 +24,13 @@ public class Task {
 
     private TaskStatus status;
 
-    private Long priority;
+    private TaskPriority priority;
 
     public Task() {
         this.status = TaskStatus.NEW;
     }
 
-    public Task(Long projectCode, Long employeeCode, String name, LocalDate startDate, LocalDate endDate, Long priority) {
+    public Task(Long projectCode, Long employeeCode, String name, LocalDate startDate, LocalDate endDate, TaskPriority priority) {
         this.projectCode = projectCode;
         this.employeeCode = employeeCode;
         this.name = name;
@@ -88,11 +88,11 @@ public class Task {
         this.status = status;
     }
 
-    public Long getPriority() {
+    public TaskPriority getPriority() {
         return priority;
     }
 
-    public void setPriority(Long priority) {
+    public void setPriority(TaskPriority priority) {
         this.priority = priority;
     }
 }

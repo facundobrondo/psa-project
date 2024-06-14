@@ -51,7 +51,7 @@ public class ProjectsApp {
 
 	@GetMapping("/projects/{projectCode}")
 	public ResponseEntity<Project> getProject(@PathVariable Long projectCode) {
-		Optional<Project> projectOptional = projectService.findByProjectCode(projectCode);
+		Optional<Project> projectOptional = projectService.getByCode(projectCode);
 		return ResponseEntity.of(projectOptional);
 	}
 
@@ -59,6 +59,17 @@ public class ProjectsApp {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Task createTask(@PathVariable Long projectCode, @RequestBody Task task) {
     	return taskService.createTask(projectCode, task);
+	}
+
+	@GetMapping("/tasks/{taskCode}")
+	public ResponseEntity<Task> getTask(@PathVariable Long taskCode) {
+		Optional<Task> taskOptional = taskService.getByCode(taskCode);
+		return ResponseEntity.of(taskOptional);
+	}
+
+	@GetMapping("/projects/{projectCode}/tasks")
+	public Collection<Task> getTasksByProject(@PathVariable Long projectCode) {
+		return taskService.getByProject(projectCode);
 	}
 
 	@Bean

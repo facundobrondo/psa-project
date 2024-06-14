@@ -22,7 +22,7 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Optional<Project> findByProjectCode(Long projectCode) {
-        return projectRepository.findById(projectCode);
+    public Optional<Project> getByCode(Long code) {
+        return projectRepository.findById(code);
     }
 }
