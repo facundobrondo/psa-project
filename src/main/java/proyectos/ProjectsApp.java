@@ -55,6 +55,12 @@ public class ProjectsApp {
 		return ResponseEntity.of(projectOptional);
 	}
 
+	@PutMapping("/projects/{projectCode}")
+	public ResponseEntity<Project> updateProject(@PathVariable Long projectCode, @RequestBody Project updatedProject) {
+		Project project = projectService.updateProject(projectCode, updatedProject);
+		return project != null ? ResponseEntity.ok(project) : ResponseEntity.notFound().build();
+	}
+
 	@PostMapping("/projects/{projectCode}/tasks")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Task createTask(@PathVariable Long projectCode, @RequestBody Task task) {
@@ -70,6 +76,12 @@ public class ProjectsApp {
 	@GetMapping("/projects/{projectCode}/tasks")
 	public Collection<Task> getTasksByProject(@PathVariable Long projectCode) {
 		return taskService.getByProject(projectCode);
+	}
+
+	@PutMapping("/tasks/{taskCode}")
+	public ResponseEntity<Task> updateTask(@PathVariable Long taskCode, @RequestBody Task updatedTask) {
+		Task task = taskService.updateTask(taskCode, updatedTask);
+		return task != null ? ResponseEntity.ok(task) : ResponseEntity.notFound().build();
 	}
 
 	@Bean

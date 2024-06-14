@@ -26,4 +26,31 @@ public class TaskService {
     public Collection<Task> getByProject(Long projectCode) {
         return taskRepository.findAllByProjectCode(projectCode);
     }
+
+    public Task updateTask(Long code, Task updatedTask) {
+        return taskRepository.findById(code).map(task -> {
+            if (updatedTask.getProjectCode() != null) {
+                task.setProjectCode(updatedTask.getProjectCode());
+            }
+            if (updatedTask.getEmployeeCode() != null) {
+                task.setEmployeeCode(updatedTask.getEmployeeCode());
+            }
+            if (updatedTask.getName() != null) {
+                task.setName(updatedTask.getName());
+            }
+            if (updatedTask.getStartDate() != null) {
+                task.setStartDate(updatedTask.getStartDate());
+            }
+            if (updatedTask.getEndDate() != null) {
+                task.setEndDate(updatedTask.getEndDate());
+            }
+            if (updatedTask.getStatus() != null) {
+                task.setStatus(updatedTask.getStatus());
+            }
+            if (updatedTask.getPriority() != null) {
+                task.setPriority(updatedTask.getPriority());
+            }
+            return taskRepository.save(task);
+        }).orElse(null);
+    }
 }
