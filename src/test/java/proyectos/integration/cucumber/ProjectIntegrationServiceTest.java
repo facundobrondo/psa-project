@@ -2,6 +2,7 @@ package proyectos.integration.cucumber;
 
 import proyectos.ProjectsApp;
 import proyectos.model.Project;
+import proyectos.model.ProjectStatus;
 import proyectos.service.ProjectService;
 
 import java.time.LocalDate;
@@ -17,13 +18,13 @@ public class ProjectIntegrationServiceTest {
     @Autowired
     ProjectService projectService;
 
-    Project createProject(Long leaderCode, Long productCode, String name, LocalDate startDate, LocalDate endDate) {
-        return projectService.createProject(new Project(leaderCode, productCode, name, startDate, endDate));
+    Project createProject(Long leaderCode, Long productCode, String name, String status, String description, LocalDate startDate, LocalDate endDate) {
+        return projectService.createProject(new Project(leaderCode, productCode, name, status, description, startDate, endDate));
     }
 
-    Project createProject(Long productCode, String name, LocalDate startDate, LocalDate endDate) {
-        return projectService.createProject(new Project(productCode, name, startDate, endDate));
-    }
+    // Project createProject(Long productCode, String name, String status, String description, LocalDate startDate, LocalDate endDate) {
+    //     return projectService.createProject(new Project(productCode, name, status, description, startDate, endDate));
+    // }
 
 
 }

@@ -22,28 +22,32 @@ public class Project {
 
     private LocalDate endDate;
 
+    private String description;
+
     private ProjectStatus status;
 
     public Project() {
         this.status = ProjectStatus.INITIATED;
     }
 
-    public Project(Long leaderCode, Long productCode, String name, LocalDate startDate, LocalDate endDate) {
+    public Project(Long leaderCode, Long productCode, String name, String status, String description, LocalDate startDate, LocalDate endDate) {
         this.leaderCode = leaderCode;
         this.productCode = productCode;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.status = ProjectStatus.INITIATED;
+        this.description = description;
+        this.status = ProjectStatus.valueOf(status.toUpperCase());
     }
 
-    public Project(Long productCode, String name, LocalDate startDate, LocalDate endDate) {
-        this.productCode = productCode;
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = ProjectStatus.INITIATED;
-    }
+    // public Project(Long productCode, String name, String status, String description, LocalDate startDate, LocalDate endDate) {
+    //     this.productCode = productCode;
+    //     this.name = name;
+    //     this.startDate = startDate;
+    //     this.endDate = endDate;
+    //     this.description = description;
+    //     this.status = ProjectStatus.valueOf(status.toUpperCase());
+    // }
 
     public Long getProjectCode() {
         return projectCode;
@@ -55,6 +59,14 @@ public class Project {
 
     public void setLeaderCode(Long leaderCode) {
         this.leaderCode = leaderCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getProductCode() {

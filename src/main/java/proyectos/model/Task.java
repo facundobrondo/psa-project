@@ -14,30 +14,33 @@ public class Task {
 
     private Long projectCode;
 
-    private Long employeeCode;
-
     private String name;
+
+    private TaskStatus status;
+
+    private String description;
+
+    private Long employeeCode;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
 
-    private TaskStatus status;
-
     private TaskPriority priority;
+
+
 
     public Task() {
         this.status = TaskStatus.NEW;
     }
 
-    public Task(Long projectCode, Long employeeCode, String name, LocalDate startDate, LocalDate endDate, TaskPriority priority) {
-        this.projectCode = projectCode;
-        this.employeeCode = employeeCode;
+    public Task(String name, TaskStatus status, String description, Long employeeCode, LocalDate startDate, LocalDate endDate) {
         this.name = name;
+        this.status = status;
+        this.description = description;
+        this.employeeCode = employeeCode;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.status = TaskStatus.NEW;
-        this.priority = priority;
     }
 
     public Long getProjectCode() {
@@ -54,6 +57,14 @@ public class Task {
 
     public void setEmployeeCode(Long employeeCode) {
         this.employeeCode = employeeCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {
