@@ -1,7 +1,10 @@
 package proyectos;
 
+import proyectos.exceptions.CantCreateTaskOnInvalidProjectException;
 import proyectos.model.Project;
+import proyectos.model.ProjectStatus;
 import proyectos.model.Task;
+import proyectos.model.TaskStatus;
 import proyectos.service.ProjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +67,19 @@ public class ProjectsApp {
 	@PostMapping("/projects/{projectCode}/tasks")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Task createTask(@PathVariable Long projectCode, @RequestBody Task task) {
-    	return taskService.createTask(projectCode, task);
+		Optional<Project> projectOptional = projectService.getByCode(projectCode);
+    
+		if (projectOptional.isPresent()) {
+			Project currentProject = projectOptional.get();
+			
+			if (currentProject.getStatus() == ProjectStatus.INITIATED) {
+				return taskService.createTask(projectCode, task);
+			} else {
+				throw new CantCreateTaskOnInvalidProjectException("Can't create a new task on" + currentProject.getStatus() + "project");
+			}
+		} else {
+			throw new CantCreateTaskOnInvalidProjectException("Project with code " + projectCode + " not found");
+		}
 	}
 
 	@GetMapping("/tasks/{taskCode}")

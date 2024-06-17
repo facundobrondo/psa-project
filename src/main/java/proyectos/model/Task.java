@@ -1,6 +1,7 @@
 package proyectos.model;
 
 import java.time.LocalDate;
+import proyectos.exceptions.*;
 
 import javax.persistence.*;
 
@@ -34,13 +35,26 @@ public class Task {
         this.status = TaskStatus.NEW;
     }
 
-    public Task(String name, TaskStatus status, String description, Long employeeCode, LocalDate startDate, LocalDate endDate) {
-        this.name = name;
-        this.status = status;
+    public Task(String name, String status, String description, Long employeeCode, String priority, LocalDate startDate, LocalDate endDate) {
+        if(name == null || name.isEmpty()){
+            throw new InvalidNameException("Name cannot be null or empty");
+        } else {
+            this.name = name;
+        }
+        if(status == null || status.isEmpty()){
+            this.status = TaskStatus.NEW;
+        } else {
+            this.status = TaskStatus.valueOf(status.toUpperCase());
+        }
         this.description = description;
         this.employeeCode = employeeCode;
         this.startDate = startDate;
         this.endDate = endDate;
+        if(priority == null || priority.isEmpty()){
+            this.priority = TaskPriority.LOW;
+        } else {
+            this.priority = TaskPriority.valueOf(priority.toUpperCase());
+        }
     }
 
     public Long getProjectCode() {

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import proyectos.model.Task;
 import proyectos.repository.TaskRepository;
+import proyectos.repository.ProjectRepository;
 
 import java.util.Collection;
 import java.util.Optional;

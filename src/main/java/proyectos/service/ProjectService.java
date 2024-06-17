@@ -1,7 +1,6 @@
 package proyectos.service;
 
 import proyectos.model.Project;
-import proyectos.model.Task;
 import proyectos.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
