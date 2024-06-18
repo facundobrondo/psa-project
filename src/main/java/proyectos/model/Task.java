@@ -36,11 +36,7 @@ public class Task {
     }
 
     public Task(String name, String status, String description, Long employeeCode, String priority, LocalDate startDate, LocalDate endDate) {
-        if(name == null || name.isEmpty()){
-            throw new InvalidNameException("Name cannot be null or empty");
-        } else {
-            this.name = name;
-        }
+        this.name = name;
         if(status == null || status.isEmpty()){
             this.status = TaskStatus.NEW;
         } else {

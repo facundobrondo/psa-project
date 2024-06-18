@@ -147,7 +147,7 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     }
 
     @Then("^The task is successfully created with name (\\w+), status (\\w+), description (\\w+), assigned to employee (\\d+), priority (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and end date (\\d{4}-\\d{2}-\\d{2})$")
-    public void the_project_should_be_created_with_all_data(String name, String status, String description, Long employeeCode, String priority, String startDate, String endDate) {
+    public void the_task_should_be_created_with_all_data(String name, String status, String description, Long employeeCode, String priority, String startDate, String endDate) {
         assertNotNull(task);
         assertNotNull(project);
         assertNull(nsn);
@@ -162,7 +162,7 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     }
 
     @Then("^The task is successfully created with name (\\w+), status (\\w+), description (\\w+), priority (\\w+), start date (\\d{4}-\\d{2}-\\d{2}), end date (\\d{4}-\\d{2}-\\d{2}) and no assigned developer$")
-    public void the_project_should_be_created_without_a_developer(String name, String status, String description, String priority, String startDate, String endDate) {
+    public void the_task_should_be_created_without_a_developer(String name, String status, String description, String priority, String startDate, String endDate) {
         assertNotNull(task);
         assertNotNull(project);
         assertNull(nsn);
@@ -177,7 +177,7 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     }
 
     @Then("^The task is successfully created with name (\\w+), status (\\w+), assigned to employee (\\d+), priority (\\w+), start date (\\d{4}-\\d{2}-\\d{2}), end date (\\d{4}-\\d{2}-\\d{2}) and no description$")
-    public void the_project_should_be_created_with_no_description(String name, String status, Long employeeCode, String priority, String startDate, String endDate) {
+    public void the_task_should_be_created_with_no_description(String name, String status, Long employeeCode, String priority, String startDate, String endDate) {
         assertNotNull(task);
         assertNotNull(project);
         assertNull(nsn);
@@ -192,7 +192,7 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     }
 
     @Then("^The task is successfully created with name (\\w+), status (\\w+), description (\\w+), assigned to employee (\\d+), priority (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and no estimated end date$")
-    public void the_project_should_be_created_with_no_end_date(String name, String status, String description, Long employeeCode, String priority, String startDate) {
+    public void the_task_should_be_created_with_no_end_date(String name, String status, String description, Long employeeCode, String priority, String startDate) {
         assertNotNull(task);
         assertNotNull(project);
         assertNull(nsn);
@@ -206,13 +206,13 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
         assertEquals(project.getProjectCode(), task.getProjectCode());
     }
 
-    @Then("^Creation should be denied due to no specified task name$")
-    public void the_project_cant_be_created_with_no_name() {
+    @Then("^Creation should be denied due to invalid task name$")
+    public void the_task_cant_be_created_with_no_name() {
         assertNotNull(nsn);
     }
 
     @Then("^Creation should be denied due to invalid project$")
-    public void the_project_cant_be_created_with_invalid_project() {
+    public void the_task_cant_be_created_with_invalid_project() {
         assertNotNull(nsn);
     }
 

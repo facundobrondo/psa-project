@@ -3,6 +3,7 @@ package proyectos.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import proyectos.model.Task;
+import proyectos.exceptions.*;
 import proyectos.repository.TaskRepository;
 import proyectos.repository.ProjectRepository;
 
@@ -16,6 +17,9 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     public Task createTask(Long projectCode, Task task) {
+        if(task.getName() == null || task.getName().isEmpty()){
+            throw new InvalidNameException("Name cannot be null or empty");
+        }
         task.setProjectCode(projectCode);
         return taskRepository.save(task);
     }
@@ -50,6 +54,9 @@ public class TaskService {
             }
             if (updatedTask.getPriority() != null) {
                 task.setPriority(updatedTask.getPriority());
+            }
+            if (updatedTask.getDescription() != null) {
+                task.setDescription(updatedTask.getDescription());
             }
             return taskRepository.save(task);
         }).orElse(null);

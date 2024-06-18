@@ -24,3 +24,9 @@ Feature: create Project
     Given A new project will be started for product 14, with employee 55 as developer, named PSA_Project, description Arquitecture_Project, start date 2024-04-01 and end date 2024-06-30
     When I create the project with no specific status
     Then The project should be created with status initiated
+
+  Scenario: Create a project with no specific name
+    Given A new project will be started for product 14, with employee 55 as developer, with status initiated, description Arquitecture_Project, start date 2024-04-01, end date 2024-06-30 but no specific name
+    When I create the project with no specific name
+    Then Creation should be denied due to invalid project name
+    

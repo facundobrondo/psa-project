@@ -19,13 +19,12 @@ public class ProjectIntegrationServiceTest{
     @Autowired
     ProjectService projectService;
 
-    Project createProject(Long leaderCode, Long productCode, String name, String status, String description, LocalDate startDate, LocalDate endDate) throws InvalidNameException {
+    Project createProject(Long leaderCode, Long productCode, String name, String status, String description, LocalDate startDate, LocalDate endDate) {
         return projectService.createProject(new Project(leaderCode, productCode, name, status, description, startDate, endDate));
     }
 
-    // Project createProject(Long productCode, String name, String status, String description, LocalDate startDate, LocalDate endDate) {
-    //     return projectService.createProject(new Project(productCode, name, status, description, startDate, endDate));
-    // }
-
+    Project updateProject(Long code, Project updatedProject) {
+        return projectService.updateProject(code, updatedProject);
+    }
 
 }

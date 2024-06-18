@@ -2,6 +2,7 @@ package proyectos.integration.cucumber;
 
 import proyectos.model.Project;
 import proyectos.model.ProjectStatus;
+import proyectos.ProjectsApp;
 import proyectos.exceptions.*;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -17,9 +18,12 @@ import java.time.LocalDate;
 
 import javax.naming.InvalidNameException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
 
     private Project project;
+    private Project updatedProject;
 
     private Long productCode;
     private Long leaderCode;
@@ -29,7 +33,7 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    private InvalidNameException invalid_name;
+    private Exception nsn;
 
     @Before
     public void setup() {
@@ -87,6 +91,37 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         this.endDate = LocalDate.parse(endDate);
     }
 
+    @Given("^A new project will be started for product (\\d+), with employee (\\d+) as developer, with status (\\w+), description (\\w+), start date (\\d{4}-\\d{2}-\\d{2}), end date (\\d{4}-\\d{2}-\\d{2}) but no specific name$")
+    public void a_new_project_will_be_started(Long productCode, Long employeeCode, String status, String description, String startDate, String endDate) {
+        this.productCode = productCode;
+        this.leaderCode = employeeCode;
+        this.status = status;
+        this.description = description;
+        this.startDate = LocalDate.parse(startDate);
+        this.endDate = LocalDate.parse(endDate);
+    }
+
+    @Given("^An existing project (\\w+) with employee (\\d+) as leader, with status (\\w+), description (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and end date (\\d{4}-\\d{2}-\\d{2})$")
+    public void an_existing_project_will_be_updated_with_a_new_name(String name, Long employeeCode, String status, String description, String recievedStartDate, String recievedEndDate) {
+        this.leaderCode = employeeCode;
+        this.name = name;
+        this.description = description;
+        this.startDate = LocalDate.parse(recievedStartDate);
+        this.endDate = LocalDate.parse(recievedEndDate);
+
+        this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
+    }
+
+    @Given("^An existing project (\\w+) with no leader, with status (\\w+), description (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and end date (\\d{4}-\\d{2}-\\d{2})$")
+    public void an_existing_project_will_be_updated_a_leader(String name, String status, String description, String recievedStartDate, String recievedEndDate) {
+        this.name = name;
+        this.description = description;
+        this.startDate = LocalDate.parse(recievedStartDate);
+        this.endDate = LocalDate.parse(recievedEndDate);
+
+        this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
+    }
+
     @When("^I create the project with said data$")
     public void i_create_the_project_and_assign_employee_as_the_leader() {
         this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
@@ -110,6 +145,41 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
     @When("^I create the project with no specific status$")
     public void i_create_the_project_with_no_specific_state() {
         this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
+    }
+
+    @When("^I create the project with no specific name$")
+    public void i_create_the_task_assigned_to_the_project() {
+        try {
+            this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
+        } catch (Exception nsn){
+            this.nsn = nsn;
+        };   
+    }
+
+    @When("^I update the title to (\\w+)$")
+    public void i_udpate_the_project_with_a_new_name(String name) {
+        project = updateProject(project.getProjectCode(), new Project(null, null, name, null, null, null, null));
+    }
+
+    @When("^I update the project status to (\\w+)$")
+    public void i_udpate_the_project_with_a_new_status(String status) {
+        project = updateProject(project.getProjectCode(), new Project(null, null, null, status, null, null, null));
+    }
+
+    @When("^I assign eployee (\\d+) as the leader$")
+    public void i_udpate_the_project_with_a_leader(Long employeeCode) {
+        project = updateProject(project.getProjectCode(), new Project(employeeCode, null, null, null, null, null, null));
+    }
+
+    @When("^I update the project description to (\\w+)$")
+    public void i_udpate_the_project_with_a_new_description(String description) {
+        project = updateProject(project.getProjectCode(), new Project(null, null, null, null, description, null, null));
+    }
+
+    @When("^I update the end date to (\\d{4}-\\d{2}-\\d{2})$")
+    public void i_udpate_the_project_with_a_new_end_date(String endDate) {
+
+        project = updateProject(project.getProjectCode(), new Project(null, null, null, null, null, null, LocalDate.parse(endDate)));
     }
 
     @Then("^The project should be created with leader code (\\d+), product code (\\d+), name (\\w+), status (\\w+), description (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and end date (\\d{4}-\\d{2}-\\d{2})$")
@@ -163,6 +233,36 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
     @Then("^The project should be created with status (\\w+)$")
     public void the_project_should_be_created_with_status_initiated(String status) {
         assertEquals(ProjectStatus.valueOf(status.toUpperCase()), project.getStatus());
+    }
+
+    @Then("^Creation should be denied due to invalid project name$")
+    public void the_project_cant_be_created_with_no_name() {
+        assertNotNull(nsn);
+    }
+
+    @Then("^The project should now be called (\\w+)$")
+    public void the_project_should_now_be_called(String name) {
+        assertEquals(name, project.getName());
+    }
+
+    @Then("^The project should now have (\\w+) as status$")
+    public void the_project_should_now_have_finished_status(String status) {
+        assertEquals(ProjectStatus.valueOf(status.toUpperCase()), project.getStatus());
+    }
+
+    @Then("^The project should now have employee (\\d+) as leader$")
+    public void the_project_should_now_have_finished_status(Long leaderCode) {
+        assertEquals(leaderCode, project.getLeaderCode());
+    }
+
+    @Then("^The project should now have (\\w+) as description$")
+    public void the_project_should_now_have_new_description(String description) {
+        assertEquals(description, project.getDescription());
+    }
+
+    @Then("^The end date should now be (\\d{4}-\\d{2}-\\d{2})$")
+    public void the_project_should_now_have_new_end_date(String endDate) {
+        assertEquals(LocalDate.parse(endDate), project.getEndDate());
     }
 
     @After

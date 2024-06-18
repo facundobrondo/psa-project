@@ -1,6 +1,7 @@
 package proyectos.service;
 
 import proyectos.model.Project;
+import proyectos.exceptions.*;
 import proyectos.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ public class ProjectService {
     private ProjectRepository projectRepository;
 
     public Project createProject(Project project) {
+        if(project.getName() == null || project.getName().isEmpty()){
+            throw new InvalidNameException("Name cannot be null or empty");
+        }
         return projectRepository.save(project);
     }
 
@@ -45,6 +49,9 @@ public class ProjectService {
             }
             if (updatedProject.getStatus() != null) {
                 project.setStatus(updatedProject.getStatus());
+            }
+            if (updatedProject.getDescription() != null) {
+                project.setDescription(updatedProject.getDescription());
             }
             return projectRepository.save(project);
         }).orElse(null);

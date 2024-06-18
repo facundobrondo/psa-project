@@ -34,11 +34,7 @@ public class Project {
     public Project(Long leaderCode, Long productCode, String name, String status, String description, LocalDate startDate, LocalDate endDate) {
         this.leaderCode = leaderCode;
         this.productCode = productCode;
-        if(name == null || name.isEmpty()){
-            throw new InvalidNameException("Name cannot be null or empty");
-        } else {
-            this.name = name;
-        }
+        this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
