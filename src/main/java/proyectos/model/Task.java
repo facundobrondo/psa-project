@@ -53,6 +53,10 @@ public class Task {
         }
     }
 
+    public Long getTaskCode() {
+        return taskCode;
+    }
+
     public Long getProjectCode() {
         return projectCode;
     }
