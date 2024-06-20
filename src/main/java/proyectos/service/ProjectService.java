@@ -2,9 +2,12 @@ package proyectos.service;
 
 import proyectos.model.Project;
 import proyectos.exceptions.*;
+import proyectos.model.ProjectStatus;
 import proyectos.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -54,6 +57,20 @@ public class ProjectService {
                 project.setDescription(updatedProject.getDescription());
             }
             return projectRepository.save(project);
+        }).orElse(null);
+    }
+
+    public Project terminateProject(Long code) {
+        return projectRepository.findById(code).map(project -> {
+            if (project.getStatus() == ProjectStatus.SUSPENDED) {
+                throw new InvalidProyect("Proyect is already Suspended");
+            }
+            if (project.getStatus() == ProjectStatus.FINISHED) {
+                throw new InvalidProyect("Proyect is Finished");
+            }
+
+            project.setStatus(ProjectStatus.SUSPENDED);
+            return project;
         }).orElse(null);
     }
 }

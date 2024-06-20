@@ -2,7 +2,11 @@ package proyectos.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import proyectos.model.Project;
+import proyectos.model.ProjectStatus;
 import proyectos.model.Task;
+import proyectos.model.TaskStatus;
 import proyectos.exceptions.*;
 import proyectos.repository.TaskRepository;
 import proyectos.repository.ProjectRepository;
@@ -59,6 +63,20 @@ public class TaskService {
                 task.setDescription(updatedTask.getDescription());
             }
             return taskRepository.save(task);
+        }).orElse(null);
+    }
+
+    public Task terminateTask(Long code) {
+        return taskRepository.findById(code).map(task -> {
+            if (task.getStatus() == TaskStatus.LOCKED) {
+                throw new InvalidTask("Task is already Locked");
+            }
+            if (task.getStatus() == TaskStatus.CLOSED) {
+                throw new InvalidTask("Task is Closed");
+            }
+
+            task.setStatus(TaskStatus.LOCKED);
+            return task;
         }).orElse(null);
     }
 }

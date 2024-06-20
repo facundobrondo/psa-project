@@ -182,6 +182,15 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         project = updateProject(project.getProjectCode(), new Project(null, null, null, null, null, null, LocalDate.parse(endDate)));
     }
 
+    @When("^I terminate the project$")
+    public void i_terminate_the_project() {
+        try {
+            project = terminateProject(project.getProjectCode());
+        } catch (Exception nsn){
+            this.nsn = nsn;
+        };   
+    }
+
     @Then("^The project should be created with leader code (\\d+), product code (\\d+), name (\\w+), status (\\w+), description (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and end date (\\d{4}-\\d{2}-\\d{2})$")
     public void the_project_should_be_created_with_all_data(Long leaderCode, Long productCode, String name, String status, String description, String startDate, String endDate) {
         assertNotNull(project);
@@ -263,6 +272,16 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
     @Then("^The end date should now be (\\d{4}-\\d{2}-\\d{2})$")
     public void the_project_should_now_have_new_end_date(String endDate) {
         assertEquals(LocalDate.parse(endDate), project.getEndDate());
+    }
+
+    @Then("^Termination should be denied due to project already terminated$")
+    public void suspended_project_cant_be_terminated() {
+        assertNotNull(nsn);
+    }
+
+    @Then("^Termination should be denied due to finished project$")
+    public void finished_project_cant_be_terminated() {
+        assertNotNull(nsn);
     }
 
     @After

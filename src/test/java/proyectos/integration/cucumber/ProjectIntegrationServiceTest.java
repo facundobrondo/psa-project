@@ -27,4 +27,8 @@ public class ProjectIntegrationServiceTest{
         return projectService.updateProject(code, updatedProject);
     }
 
+    Project terminateProject(Long code) {
+        return projectService.terminateProject(code);
+    }
+
 }

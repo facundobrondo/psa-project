@@ -20,7 +20,7 @@ Feature: update Project
     When I update the project description to Accomodations_Register
     Then The project should now have Accomodations_Register as description
 
-  Scenario: Update project with new description
+  Scenario: Update project with new end date
     Given An existing project PSA_Mailing with employee 55 as leader, with status initiated, description Arquitecture_Project, start date 2024-04-01 and end date 2024-06-30
     When I update the end date to 2024-10-31
     Then The end date should now be 2024-10-31
