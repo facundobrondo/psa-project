@@ -95,7 +95,23 @@ public class ProjectsApp {
 
 	@PutMapping("/tasks/{taskCode}")
 	public ResponseEntity<Task> updateTask(@PathVariable Long taskCode, @RequestBody Task updatedTask) {
-		Task task = taskService.updateTask(taskCode, updatedTask);
+		Optional<Task> taskOptional = taskService.getByCode(taskCode);
+		Task task = null;
+		if (taskOptional.isPresent()) {
+			Task currentTask = taskOptional.get();
+			Optional<Project> projectOptional = projectService.getByCode(currentTask.getProjectCode());
+			if(projectOptional.isPresent()){
+				Project currentProject = projectOptional.get();
+				if (currentProject.getStatus() == ProjectStatus.INITIATED) {
+					task = taskService.updateTask(taskCode, updatedTask);
+				} else {
+					throw new CantCreateTaskOnInvalidProjectException("Can't update a task on" + currentProject.getStatus() + "project");
+				}
+			}
+		} else {
+			throw new CantCreateTaskOnInvalidProjectException("No task found for code " + taskCode);
+		}
+
 		return task != null ? ResponseEntity.ok(task) : ResponseEntity.notFound().build();
 	}
 

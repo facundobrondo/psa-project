@@ -158,6 +158,7 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
         repository.updateProject(project.getProjectCode(), new Project(null, null, null, projectStatus, null, null, null));
     }
 
+
     @When("^I create the new task with the given data$")
     public void i_create_the_task_assigned_to_the_project() {
         try {
@@ -199,7 +200,7 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     }
 
     @When("^I update the task developer to employee (\\d+)$")
-    public void i_udpate_the_task_with_a_new_developer_on_suspended(Long employeeCode) {
+    public void i_udpate_the_task_with_a_new_developer_on_suspended_project(Long employeeCode) {
         try {
             repository.updateTask(task.getTaskCode(), new Task(null, null, null, employeeCode, null, null, null));
         } catch (Exception nsn){

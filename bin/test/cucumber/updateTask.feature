@@ -24,3 +24,8 @@ Feature: update Project
     Given An existing task PSA_Mailing in project PSA_Main_Banking, with status new, description Single_Mailing_System, start date 2024-04-01 and end date 2024-06-30
     When I assign employee 51 as developer
     Then The task developer should now be employee 51
+
+Scenario: Update task with new developer on suspended project
+    Given An existing task PSA_Mailing in suspended project PSA_Main_Banking, with status new, description Single_Mailing_System, start date 2024-04-01 and end date 2024-06-30
+    When I update the task developer to employee 51
+    Then Update should be denied due to invalid project status
