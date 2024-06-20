@@ -99,6 +99,16 @@ public class ProjectsApp {
 		return task != null ? ResponseEntity.ok(task) : ResponseEntity.notFound().build();
 	}
 
+	@DeleteMapping("/projects/{projectCode}")
+	public void deleteProject(@PathVariable Long projectCode) {
+		projectService.terminateProject(projectCode);
+	}
+
+	@DeleteMapping("/tasks/{taskCode}")
+	public void deleteTask(@PathVariable Long taskCode) {
+		taskService.terminateTask(taskCode);
+	}
+
 	@Bean
 	public Docket apiDocket() {
 		return new Docket(DocumentationType.SWAGGER_2)
