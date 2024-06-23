@@ -278,15 +278,6 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
         };     
     }
 
-    @When("^Attempting to terminate the task$")
-    public void i_terminate_the_task() {
-        try {
-            task = terminateTask(task.getTaskCode());
-        } catch (Exception nsn){
-            this.nsn = nsn;
-        };   
-    }
-
     @When("^Attempting to delete the task$")
     public void i_delete_the_task() {
         this.deletedTaskCode = task.getTaskCode();
@@ -405,16 +396,6 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
 
     @Then("^Update should be denied due to invalid project status$")
     public void the_task_cant_be_updated() {
-        assertNotNull(nsn);
-    }
-
-    @Then("^Termination should be denied due to task already locked$")
-    public void locked_task_cant_be_terminated() {
-        assertNotNull(nsn);
-    }
-
-    @Then("^Termination should be denied due to closed task$")
-    public void closed_task_cant_be_terminated() {
         assertNotNull(nsn);
     }
 

@@ -179,15 +179,6 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         };
     }
 
-    @When("^Attempting to terminate the project$")
-    public void i_terminate_the_project() {
-        try {
-            project = terminateProject(project.getProjectCode());
-        } catch (Exception nsn){
-            this.nsn = nsn;
-        };   
-    }
-
     @When("^Attempting to delete the project$")
     public void i_delete_the_project() {
         this.deletedFirstTaskCode = firstTask.getTaskCode();
@@ -281,16 +272,6 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
 
     @Then("^Update should be denied due to invalid project end date$")
     public void the_project_cant_be_updated_with_invalid_end_date() {
-        assertNotNull(nsn);
-    }
-
-    @Then("^Termination should be denied due to status already being suspended$")
-    public void suspended_project_cant_be_terminated() {
-        assertNotNull(nsn);
-    }
-
-    @Then("^Termination should be denied due to project being finished$")
-    public void finished_project_cant_be_terminated() {
         assertNotNull(nsn);
     }
 

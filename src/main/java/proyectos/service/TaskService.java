@@ -72,20 +72,6 @@ public class TaskService {
         }).orElse(null);
     }
 
-    public Task terminateTask(Long code) {
-        return taskRepository.findById(code).map(task -> {
-            if (task.getStatus() == TaskStatus.LOCKED) {
-                throw new InvalidTask("Task is already Locked");
-            }
-            if (task.getStatus() == TaskStatus.CLOSED) {
-                throw new InvalidTask("Task is Closed");
-            }
-
-            task.setStatus(TaskStatus.LOCKED);
-            return task;
-        }).orElse(null);
-    }
-
     public void deleteTask(Long code) {
         taskRepository.deleteById(code);
     }

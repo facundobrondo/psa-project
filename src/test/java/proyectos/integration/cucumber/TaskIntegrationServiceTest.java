@@ -28,8 +28,4 @@ public class TaskIntegrationServiceTest{
         return taskService.updateTask(code, updatedTask);
     }
 
-    Task terminateTask(Long code) {
-        return taskService.terminateTask(code);
-    }
-
 }

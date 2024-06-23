@@ -63,20 +63,6 @@ public class ProjectService {
         }).orElse(null);
     }
 
-    public Project terminateProject(Long code) {
-        return projectRepository.findById(code).map(project -> {
-            if (project.getStatus() == ProjectStatus.SUSPENDED) {
-                throw new InvalidProyect("Proyect is already Suspended");
-            }
-            if (project.getStatus() == ProjectStatus.FINISHED) {
-                throw new InvalidProyect("Proyect is Finished");
-            }
-
-            project.setStatus(ProjectStatus.SUSPENDED);
-            return project;
-        }).orElse(null);
-    }
-
     public void deleteProject(Long code) {
         projectRepository.deleteById(code);
     }

@@ -119,16 +119,6 @@ public class ProjectsApp {
 		return task != null ? ResponseEntity.ok(task) : ResponseEntity.notFound().build();
 	}
 
-	@PutMapping("/projects/{projectCode}/terminate")
-	public void terminateProject(@PathVariable Long projectCode) {
-		projectService.terminateProject(projectCode);
-	}
-
-	@PutMapping("/tasks/{taskCode}/terminate")
-	public void terminateTask(@PathVariable Long taskCode) {
-		taskService.terminateTask(taskCode);
-	}
-
 	@DeleteMapping("/projects/{projectCode}")
 	public void deleteProject(@PathVariable Long projectCode) {
 		Collection<Task> projectTasks = taskService.getByProject(projectCode);
