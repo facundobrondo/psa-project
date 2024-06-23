@@ -45,6 +45,9 @@ public class Task {
         this.description = description;
         this.employeeCode = employeeCode;
         this.startDate = startDate;
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+            throw new InvalidEndDateException("End date can't be prior to Start date");
+        }
         this.endDate = endDate;
         if(priority == null || priority.isEmpty()){
             this.priority = TaskPriority.LOW;

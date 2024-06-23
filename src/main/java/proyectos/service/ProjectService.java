@@ -48,6 +48,9 @@ public class ProjectService {
                 project.setStartDate(updatedProject.getStartDate());
             }
             if (updatedProject.getEndDate() != null) {
+                if(updatedProject.getEndDate().isBefore(project.getStartDate())){
+                    throw new InvalidEndDateException("End date can't be prior to start date");
+                }
                 project.setEndDate(updatedProject.getEndDate());
             }
             if (updatedProject.getStatus() != null) {
@@ -72,5 +75,9 @@ public class ProjectService {
             project.setStatus(ProjectStatus.SUSPENDED);
             return project;
         }).orElse(null);
+    }
+
+    public void deleteProject(Long code) {
+        projectRepository.deleteById(code);
     }
 }

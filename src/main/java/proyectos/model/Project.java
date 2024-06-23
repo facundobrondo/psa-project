@@ -36,6 +36,9 @@ public class Project {
         this.productCode = productCode;
         this.name = name;
         this.startDate = startDate;
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+            throw new InvalidEndDateException("End date can't be prior to Start date");
+        }
         this.endDate = endDate;
         this.description = description;
         if(status == null || status.isEmpty()){

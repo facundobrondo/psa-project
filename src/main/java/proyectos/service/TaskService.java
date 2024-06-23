@@ -21,6 +21,9 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     public Task createTask(Long projectCode, Task task) {
+        if(projectCode == null){
+            throw new CantCreateTaskOnInvalidProjectException("Can't create a task with no assigned project");
+        }
         if(task.getName() == null || task.getName().isEmpty()){
             throw new InvalidNameException("Name cannot be null or empty");
         }
@@ -51,6 +54,9 @@ public class TaskService {
                 task.setStartDate(updatedTask.getStartDate());
             }
             if (updatedTask.getEndDate() != null) {
+                if(updatedTask.getEndDate().isBefore(task.getStartDate())){
+                    throw new InvalidEndDateException("End date can't be prior to start date");
+                }
                 task.setEndDate(updatedTask.getEndDate());
             }
             if (updatedTask.getStatus() != null) {
@@ -78,5 +84,9 @@ public class TaskService {
             task.setStatus(TaskStatus.LOCKED);
             return task;
         }).orElse(null);
+    }
+
+    public void deleteTask(Long code) {
+        taskRepository.deleteById(code);
     }
 }
