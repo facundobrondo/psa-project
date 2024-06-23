@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -36,6 +37,9 @@ public class ProjectsApp {
 
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectsApp.class, args);
@@ -139,6 +143,23 @@ public class ProjectsApp {
 	public void deleteTask(@PathVariable Long taskCode) {
 		taskService.deleteTask(taskCode);
 	}
+	
+	@Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+	@GetMapping("/recursos")
+    public ResponseEntity<String> callExternalApi() {
+        String apiUrl = "https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos";
+        
+        try {
+            String response = restTemplate.getForObject(apiUrl, String.class);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calling external API: " + e.getMessage());
+        }
+    }
 
 	@Bean
 	public Docket apiDocket() {
