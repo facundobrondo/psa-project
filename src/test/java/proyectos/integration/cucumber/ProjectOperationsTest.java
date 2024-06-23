@@ -1,6 +1,7 @@
 package proyectos.integration.cucumber;
 
 import proyectos.model.Project;
+import proyectos.model.Task;
 import proyectos.model.ProjectStatus;
 import proyectos.ProjectsApp;
 import proyectos.exceptions.*;
@@ -17,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
 
@@ -31,7 +34,17 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private Task firstTask;
+    private Long deletedFirstTaskCode;
+    private Task secondTask;
+    private Long deletedSecondTaskCode;
+
+    private Long deletedProjectCode;
+
     private Exception nsn;
+
+    @Autowired
+    private ProjectsApp repository;
 
     @Before
     public void setup() {
@@ -120,30 +133,13 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
     }
 
-    // @When("^I create the project with said data$")
-    // public void i_create_the_project_and_assign_employee_as_the_leader() {
-    //     this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
-    // }
+    @Given("^An existing project (\\w+) with tasks (\\w+) and (\\w+)$")
+    public void an_existing_project_with_two_tasks(String projectName, String firstTaskName, String secondTaskName) {
 
-    // @When("^I create the project without assigning a leader$")
-    // public void i_create_the_project_without_assigning_a_leader() {
-    //     this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
-    // }
-
-    // @When("^I create the project without stating an end date$")
-    // public void i_create_the_project_without_stating_end_date() {
-    //     this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
-    // }
-
-    // @When("^I create the project without stating a description$")
-    // public void i_create_the_project_without_stating_a_description() {
-    //     this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
-    // }
-
-    // @When("^I create the project with no specific status$")
-    // public void i_create_the_project_with_no_specific_state() {
-    //     this.project = createProject(leaderCode, productCode, name, status, description, startDate, endDate);
-    // }
+        project = repository.createProject(new Project(null, null, projectName, null, null, null, null));
+        firstTask = repository.createTask(project.getProjectCode(), new Task(firstTaskName, null, null, null, null, null, null));
+        secondTask = repository.createTask(project.getProjectCode(), new Task(secondTaskName, null, null, null, null, null, null));
+    }
 
     @When("^Attempting to create the project with the given data$")
     public void i_create_the_task_assigned_to_the_project() {
@@ -190,6 +186,14 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         } catch (Exception nsn){
             this.nsn = nsn;
         };   
+    }
+
+    @When("^Attempting to delete the project$")
+    public void i_delete_the_project() {
+        this.deletedFirstTaskCode = firstTask.getTaskCode();
+        this.deletedSecondTaskCode = secondTask.getTaskCode();
+        this.deletedProjectCode = project.getProjectCode();
+        repository.deleteProject(project.getProjectCode());
     }
 
     @Then("^The project should be created with leader code (\\d+), product code (\\d+), name (\\w+), status (\\w+), description (.+), start date (\\d{4}-\\d{2}-\\d{2}) and end date (\\d{4}-\\d{2}-\\d{2})$")
@@ -288,6 +292,16 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
     @Then("^Termination should be denied due to project being finished$")
     public void finished_project_cant_be_terminated() {
         assertNotNull(nsn);
+    }
+
+    @Then("^The project and both tasks should no longer exist$")
+    public void deleted_task_no_longer_exists() {
+        ResponseEntity<?> responseFirstTask = repository.getTask(deletedFirstTaskCode);
+        ResponseEntity<?> responseSecondTask = repository.getTask(deletedSecondTaskCode);
+        ResponseEntity<?> responseProject = repository.getProject(deletedProjectCode);
+        assertEquals(HttpStatus.NOT_FOUND, responseFirstTask.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, responseSecondTask.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, responseProject.getStatusCode());
     }
 
     @After

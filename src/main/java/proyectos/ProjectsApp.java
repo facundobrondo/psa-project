@@ -127,6 +127,11 @@ public class ProjectsApp {
 
 	@DeleteMapping("/projects/{projectCode}")
 	public void deleteProject(@PathVariable Long projectCode) {
+		Collection<Task> projectTasks = taskService.getByProject(projectCode);
+		for(Task task : projectTasks){
+			taskService.deleteTask(task.getTaskCode());
+		}
+		
 		projectService.deleteProject(projectCode);
 	}
 
