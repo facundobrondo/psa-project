@@ -210,9 +210,10 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     @Given("^An existing task (\\w+) in project (\\w+) with status (\\w+)$")
     public void an_existing_task_in_project(String taskName, String projectName, String projectStatus) {
 
-        project = repository.createProject(new Project(null, null, projectName, projectStatus, null, null, null));
+        project = repository.createProject(new Project(null, null, projectName, null, null, null, null));
         task = createTask(project.getProjectCode(), taskName, null, null, null, null, null, null);
         repository.createTask(project.getProjectCode(), task);
+        repository.updateProject(project.getProjectCode(), new Project(null, null, null, projectStatus, null, null, null));
     }
 
 
@@ -281,7 +282,11 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     @When("^Attempting to delete the task$")
     public void i_delete_the_task() {
         this.deletedTaskCode = task.getTaskCode();
-        repository.deleteTask(task.getTaskCode());
+        try {
+            repository.deleteTask(task.getTaskCode());
+        } catch (Exception nsn){
+            this.nsn = nsn;
+        };   
     }
 
     @Then("^The task should be successfully created with name (\\w+), status (\\w+), description (.+), assigned to employee (\\d+), priority (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and end date (\\d{4}-\\d{2}-\\d{2})$")
@@ -403,6 +408,11 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     public void deleted_task_no_longer_exists() {
         ResponseEntity<?> response = repository.getTask(deletedTaskCode);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Then("^Deletion should be denied due to project being finished$")
+    public void cant_delete_task_on_invalid_project() {
+        assertNotNull(nsn);
     }
 
     @After

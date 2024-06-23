@@ -131,7 +131,19 @@ public class ProjectsApp {
 
 	@DeleteMapping("/tasks/{taskCode}")
 	public void deleteTask(@PathVariable Long taskCode) {
-		taskService.deleteTask(taskCode);
+		Optional<Task> taskOptional = taskService.getByCode(taskCode);
+		if (taskOptional.isPresent()) {
+			Task currentTask = taskOptional.get();
+			Optional<Project> projectOptional = projectService.getByCode(currentTask.getProjectCode());
+			if(projectOptional.isPresent()){
+				Project currentProject = projectOptional.get();
+				if (currentProject.getStatus() == ProjectStatus.INITIATED) {
+					taskService.deleteTask(taskCode);
+				} else {
+					throw new CantCreateTaskOnInvalidProjectException("Can't dalete a task on" + currentProject.getStatus() + "project");
+				}
+			}
+		}
 	}
 	
 	@Bean

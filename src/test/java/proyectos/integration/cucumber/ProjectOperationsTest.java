@@ -141,6 +141,12 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         secondTask = repository.createTask(project.getProjectCode(), new Task(secondTaskName, null, null, null, null, null, null));
     }
 
+    @Given("^An existing project (\\w+) with no tasks$")
+    public void an_existing_project_with_no_tasks(String projectName) {
+
+        project = repository.createProject(new Project(null, null, projectName, null, null, null, null));
+    }
+
     @When("^Attempting to create the project with the given data$")
     public void i_create_the_task_assigned_to_the_project() {
         try {
@@ -179,10 +185,16 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         };
     }
 
-    @When("^Attempting to delete the project$")
-    public void i_delete_the_project() {
+    @When("^Attempting to delete the project with its tasks$")
+    public void i_delete_the_project_with_two_tasks() {
         this.deletedFirstTaskCode = firstTask.getTaskCode();
         this.deletedSecondTaskCode = secondTask.getTaskCode();
+        this.deletedProjectCode = project.getProjectCode();
+        repository.deleteProject(project.getProjectCode());
+    }
+
+    @When("^Attempting to delete the project$")
+    public void i_delete_the_project() {
         this.deletedProjectCode = project.getProjectCode();
         repository.deleteProject(project.getProjectCode());
     }
@@ -276,12 +288,18 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
     }
 
     @Then("^The project and both tasks should no longer exist$")
-    public void deleted_task_no_longer_exists() {
+    public void deleted_project_and_tasks_no_longer_exists() {
         ResponseEntity<?> responseFirstTask = repository.getTask(deletedFirstTaskCode);
         ResponseEntity<?> responseSecondTask = repository.getTask(deletedSecondTaskCode);
         ResponseEntity<?> responseProject = repository.getProject(deletedProjectCode);
         assertEquals(HttpStatus.NOT_FOUND, responseFirstTask.getStatusCode());
         assertEquals(HttpStatus.NOT_FOUND, responseSecondTask.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, responseProject.getStatusCode());
+    }
+
+    @Then("^The project should no longer exist$")
+    public void deleted_project_no_longer_exists() {
+        ResponseEntity<?> responseProject = repository.getProject(deletedProjectCode);
         assertEquals(HttpStatus.NOT_FOUND, responseProject.getStatusCode());
     }
 
