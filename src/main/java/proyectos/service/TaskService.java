@@ -51,10 +51,13 @@ public class TaskService {
                 task.setName(updatedTask.getName());
             }
             if (updatedTask.getStartDate() != null) {
+                if(task.getEndDate() != null && task.getEndDate().isBefore(updatedTask.getStartDate())){
+                    throw new InvalidEndDateException("Start date can't be posterior to end date");
+                }
                 task.setStartDate(updatedTask.getStartDate());
             }
             if (updatedTask.getEndDate() != null) {
-                if(updatedTask.getEndDate().isBefore(task.getStartDate())){
+                if(task.getStartDate() != null && updatedTask.getEndDate().isBefore(task.getStartDate())){
                     throw new InvalidEndDateException("End date can't be prior to start date");
                 }
                 task.setEndDate(updatedTask.getEndDate());

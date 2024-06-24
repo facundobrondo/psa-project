@@ -72,6 +72,16 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         this.endDate = LocalDate.parse(endDate);
     }
 
+    @Given("^A new project will be started for product with code (\\d+), with employee (\\d+) as leader, named (\\w+), with status (\\w+), description (.+), no start date and end date (\\d{4}-\\d{2}-\\d{2})$")
+    public void a_new_project_will_be_started_with_no_start_date(Long productCode, Long employeeCode, String name, String status, String description, String endDate) {
+        this.productCode = productCode;
+        this.leaderCode = employeeCode;
+        this.name = name;
+        this.status = status;
+        this.description = description;
+        this.endDate = LocalDate.parse(endDate);
+    }
+
     @Given("^A new project will be started for product with code (\\d+), with employee (\\d+) as leader, named (\\w+), with status (\\w+), description (.+), start date (\\d{4}-\\d{2}-\\d{2}) and no end date$")
     public void a_new_project_will_be_started_with_no_end_date(Long productCode, Long employeeCode, String name, String status, String description, String startDate) {
         this.productCode = productCode;
@@ -185,6 +195,15 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         };
     }
 
+    @When("^Attempting to update the start date to (\\d{4}-\\d{2}-\\d{2})$")
+    public void i_udpate_the_project_with_a_new_start_date(String startDate) {
+        try {
+            project = updateProject(project.getProjectCode(), new Project(null, null, null, null, null, LocalDate.parse(startDate), null));
+        } catch (Exception nsn){
+            this.nsn = nsn;
+        };
+    }
+
     @When("^Attempting to delete the project with its tasks$")
     public void i_delete_the_project_with_two_tasks() {
         this.deletedFirstTaskCode = firstTask.getTaskCode();
@@ -219,6 +238,18 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
         assertEquals(name, project.getName());
         assertEquals(description, project.getDescription());
         assertEquals(LocalDate.parse(startDate), project.getStartDate());
+        assertEquals(LocalDate.parse(endDate), project.getEndDate());
+        assertEquals(ProjectStatus.valueOf(status.toUpperCase()), project.getStatus());
+    }
+
+    @Then("^The project should be created with leader code (\\d+), product code (\\d+), name (\\w+), status (\\w+), description (.+), no start date and end date (\\d{4}-\\d{2}-\\d{2})$")
+    public void the_project_should_be_created_with_no_start_date_and_no_end_date(Long leaderCode, Long productCode, String name, String status, String description, String endDate) {
+        assertNotNull(project);
+        assertEquals(leaderCode, project.getLeaderCode());
+        assertEquals(productCode, project.getProductCode());
+        assertEquals(name, project.getName());
+        assertEquals(description, project.getDescription());
+        assertNull(project.getStartDate());
         assertEquals(LocalDate.parse(endDate), project.getEndDate());
         assertEquals(ProjectStatus.valueOf(status.toUpperCase()), project.getStatus());
     }
@@ -284,6 +315,11 @@ public class ProjectOperationsTest extends ProjectIntegrationServiceTest {
 
     @Then("^Update should be denied due to invalid project end date$")
     public void the_project_cant_be_updated_with_invalid_end_date() {
+        assertNotNull(nsn);
+    }
+
+    @Then("^Update should be denied due to invalid project start date$")
+    public void the_project_cant_be_updated_with_invalid_start_date() {
         assertNotNull(nsn);
     }
 

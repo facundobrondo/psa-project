@@ -34,4 +34,9 @@ Feature: update Project
     Given An existing project PSA_Mailing with employee 55 as leader, with status initiated, description Cloud based mailing system, start date 2024-04-01 and end date 2024-06-30
     When Attempting to update the end date to 2024-02-25
     Then Update should be denied due to invalid project end date
+
+  Scenario: Update project with start date posterior to end date
+    Given An existing project PSA_Mailing with employee 55 as leader, with status initiated, description Cloud based mailing system, start date 2024-04-01 and end date 2024-06-30
+    When Attempting to update the start date to 2024-07-05
+    Then Update should be denied due to invalid project start date
     

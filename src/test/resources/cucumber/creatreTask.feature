@@ -15,6 +15,11 @@ Feature: create Task
     When Attempting to create the task assigned to the project
     Then The task should be successfully created with name Task_Receiver_Info, status new, assigned to employee 31, priority low, start date 2024-04-01, end date 2024-06-30 and no description
 
+  Scenario: Create a task with no start date
+    Given An existing project PSA_Mailing, a task Task_Receiver_Info will be crated with status new, description Show detailed info of the receiver, assigned to employee 31, priority low, no start date and end date 2024-06-30
+    When Attempting to create the task assigned to the project
+    Then The task should be successfully created with name Task_Receiver_Info, status new, description Show detailed info of the receiver, assigned to employee 31, priority low, no start date and end date 2024-06-30
+
   Scenario: Create a task with no end date
     Given An existing project PSA_Mailing, a task Task_Receiver_Info will be crated with status new, description Show detailed info of the receiver, assigned to employee 31, priority low, start date 2024-04-01 and no end date
     When Attempting to create the task assigned to the project

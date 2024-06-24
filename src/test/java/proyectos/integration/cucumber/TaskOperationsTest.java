@@ -92,6 +92,20 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
         this.endDate = LocalDate.parse(endDate);
     }
 
+    @Given("^An existing project (\\w+), a task (\\w+) will be crated with status (\\w+), description (.+), assigned to employee (\\d+), priority (\\w+), no start date and end date (\\d{4}-\\d{2}-\\d{2})$")
+    public void a_new_task_will_be_created_with_no_start_date(String projectName, String name, String status, String description, Long employeeCode, String priority, String endDate) {
+        
+        this.project = new Project(null, null, projectName, null, null, null, null);
+        this.repository.createProject(project);
+
+        this.taskName = name;
+        this.status = status;
+        this.description = description;
+        this.employeeCode = employeeCode;
+        this.priority = priority;
+        this.endDate = LocalDate.parse(endDate);
+    }
+
     @Given("^An existing project (\\w+), a task (\\w+) will be crated with status (\\w+), description (.+), assigned to employee (\\d+), priority (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and no end date$")
     public void a_new_task_will_be_created_with_no_end_date(String projectName, String name, String status, String description, Long employeeCode, String priority, String startDate) {
         
@@ -256,6 +270,15 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
         task = updateTask(task.getTaskCode(), new Task(null, null, description, null, null, null, null));
     }
 
+    @When("^Attempting to update the task start date to (\\d{4}-\\d{2}-\\d{2})$")
+    public void i_udpate_the_task_with_a_new_start_date(String startDate) {
+        try {
+            task = updateTask(task.getTaskCode(), new Task(null, null, null, null, null, LocalDate.parse(startDate), null));
+        } catch (Exception nsn){
+            this.nsn = nsn;
+        };
+    }
+
     @When("^Attempting to update the task end date to (\\d{4}-\\d{2}-\\d{2})$")
     public void i_udpate_the_task_with_a_new_end_date(String endDate) {
         try {
@@ -334,6 +357,21 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
         assertEquals(project.getProjectCode(), task.getProjectCode());
     }
 
+    @Then("^The task should be successfully created with name (\\w+), status (\\w+), description (.+), assigned to employee (\\d+), priority (\\w+), no start date and end date (\\d{4}-\\d{2}-\\d{2})$")
+    public void the_task_should_be_created_with_no_start_date(String name, String status, String description, Long employeeCode, String priority, String endDate) {
+        assertNotNull(task);
+        assertNotNull(project);
+        assertNull(nsn);
+        assertEquals(name, task.getName());
+        assertEquals(TaskStatus.valueOf(status.toUpperCase()), task.getStatus());
+        assertEquals(description, task.getDescription());
+        assertEquals(employeeCode, task.getEmployeeCode());
+        assertEquals(TaskPriority.valueOf(priority.toUpperCase()), task.getPriority());
+        assertEquals(LocalDate.parse(endDate), task.getEndDate());
+        assertNull(task.getStartDate());
+        assertEquals(project.getProjectCode(), task.getProjectCode());
+    }
+
     @Then("^The task should be successfully created with name (\\w+), status (\\w+), description (.+), assigned to employee (\\d+), priority (\\w+), start date (\\d{4}-\\d{2}-\\d{2}) and no estimated end date$")
     public void the_task_should_be_created_with_no_end_date(String name, String status, String description, Long employeeCode, String priority, String startDate) {
         assertNotNull(task);
@@ -355,7 +393,7 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     }
 
     @Then("^Creation should be denied due to invalid end date$")
-    public void the_task_cant_be_created_with_older_end_date() {
+    public void the_task_cant_be_created_with_prior_end_date() {
         assertNotNull(nsn);
     }
 
@@ -387,6 +425,11 @@ public class TaskOperationsTest extends TaskIntegrationServiceTest {
     @Then("^The task end date should now be (\\d{4}-\\d{2}-\\d{2})$")
     public void the_task_should_now_have_new_end_date(String endDate) {
         assertEquals(LocalDate.parse(endDate), task.getEndDate());
+    }
+
+    @Then("^Update should be denied due to invalid start date$")
+    public void the_task_cant_be_updated_with_invalid_start_date() {
+        assertNotNull(nsn);
     }
 
     @Then("^Update should be denied due to invalid end date$")

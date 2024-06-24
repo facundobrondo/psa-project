@@ -10,6 +10,11 @@ Feature: create Project
     When Attempting to create the project with the given data
     Then The project should be created without a leader, with product code 14, name PSA_Mailing, status initiated, description Cloud based mailing system, start date 2024-04-01 and end date 2024-06-30
 
+  Scenario: Create a new project with no start date
+    Given A new project will be started for product with code 14, with employee 55 as leader, named PSA_Mailing, with status initiated, description Cloud based mailing system, no start date and end date 2024-06-30
+    When Attempting to create the project with the given data
+    Then The project should be created with leader code 55, product code 14, name PSA_Mailing, status initiated, description Cloud based mailing system, no start date and end date 2024-06-30
+
   Scenario: Create a new project with no end date
     Given A new project will be started for product with code 14, with employee 55 as leader, named PSA_Mailing, with status initiated, description Cloud based mailing system, start date 2024-04-01 and no end date
     When Attempting to create the project with the given data

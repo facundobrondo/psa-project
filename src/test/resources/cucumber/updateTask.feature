@@ -20,6 +20,11 @@ Feature: update Task
     When Attempting to update the task end date to 2024-05-12
     Then The task end date should now be 2024-05-12
 
+  Scenario: Update task with start date posterior to start date
+    Given An existing task Task_Receiver_Info in project PSA_Mailing, with status new, description Show detailed info of the receiver, start date 2024-04-01 and end date 2024-06-30
+    When Attempting to update the task start date to 2024-07-05
+    Then Update should be denied due to invalid start date
+
   Scenario: Update task with end date prior to start date
     Given An existing task Task_Receiver_Info in project PSA_Mailing, with status new, description Show detailed info of the receiver, start date 2024-04-01 and end date 2024-06-30
     When Attempting to update the task end date to 2024-03-25

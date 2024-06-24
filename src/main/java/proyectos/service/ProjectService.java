@@ -45,10 +45,13 @@ public class ProjectService {
                 project.setName(updatedProject.getName());
             }
             if (updatedProject.getStartDate() != null) {
+                if(project.getEndDate() != null && project.getEndDate().isBefore(updatedProject.getStartDate())){
+                    throw new InvalidEndDateException("Start date can't be posterior to end date");
+                }
                 project.setStartDate(updatedProject.getStartDate());
             }
             if (updatedProject.getEndDate() != null) {
-                if(updatedProject.getEndDate().isBefore(project.getStartDate())){
+                if(project.getStartDate() != null && updatedProject.getEndDate().isBefore(project.getStartDate())){
                     throw new InvalidEndDateException("End date can't be prior to start date");
                 }
                 project.setEndDate(updatedProject.getEndDate());
