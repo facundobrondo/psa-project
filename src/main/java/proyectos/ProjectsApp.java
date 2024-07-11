@@ -26,7 +26,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "https://psa-tribu-c-1c-2024.vercel.app", allowedHeaders = "*")
 @RestController
 @SpringBootApplication
 @EnableSwagger2
